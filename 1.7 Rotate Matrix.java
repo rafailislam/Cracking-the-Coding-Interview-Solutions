@@ -1,3 +1,4 @@
+// not in place solution
 public class Main{
     public static int [][] rotation( int [][] arr, int n){
         int [][] narray = new int [n][n];
