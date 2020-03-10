@@ -52,42 +52,61 @@ public class Main{
 public class Main
 {
     public static boolean rotation(int [][] arr){
-        if ( arr.length == 0 || arr.length != arr[0].length )
-            return false;
-        int n = arr.length;
+        if(arr.length ==0 || arr.length != arr[0].length) return false;
         
-        for (int layer = 0; layer<n/2; layer++)
-        {
-            int first = layer;
-            int last = n-1-layer;
-            for(int i = first; i< last; i++){
-                int offset = i-first;
-                int temp = arr[first][i];
+        int n = arr.length;
+        for(int layer=0; layer<n/2; layer++){
+            int first = layer; 
+            int last = n -1 - layer;
+            for(int i = first; i < last; i++){
+                int offset = i -first;
+                int temp = arr[layer][i];
+                //System.out.println(temp);
                 
-                arr[first][i] = arr[last-offset][first];
-                arr[last-offset][first] = arr[last][last - offset];
-                arr[last][last - offset] = arr[i][last];
                 
+                //left -> top
+                arr[layer] [i] = arr[last-offset][layer];
+                //System.out.println("left "+arr[last-offset][layer]);
+                
+                // bottom -> left
+                arr[last-offset][layer] = arr[last][last-offset];
+                //System.out.println("bottom "+arr[last-offset][layer]);
+                
+                // right -> bottom
+                arr[last][last-offset] = arr[i][last];
+                //System.out.println("right "+arr[i][last] );
+                
+                // top -> right
                 arr[i][last] = temp;
+                
             }
+         
         }
-        for(int i=0;i<arr.length; i++){
-            for(int j=0;j<arr.length; j++){
-                System.out.print(arr[i][j]+" ");
-            }
-            System.out.println();
-        }
+        for(int i=0; i<n; i++){
+	        for(int j=0; j<n; j++){
+	            System.out.printf("%4d", arr[i][j]);
+	        }
+	        System.out.println();
+	    }
         return true;
     }
 	public static void main(String[] args) {
-	    int n = 6;
-	    int c=1;
-	    int arr[][] = new int[n][n];
-	    for(int i=0;i<n; i++){
-            for(int j=0;j<n; j++){
-                arr[i][j] = c++;
-            }
-        }
-		System.out.println(rotation(arr) );
+	    int n = 4;
+	    int c = 1;
+	    int [][] arr = new int[n][n];
+	    for(int i=0; i<n; i++){
+	        for(int j=0; j<n; j++){
+	            arr[i][j] = c++;
+	        }
+	    }
+	    for(int i=0; i<n; i++){
+	        for(int j=0; j<n; j++){
+	            //System.out.print(arr[i][j]+" ");
+	            System.out.printf("%4d", arr[i][j]);
+	        }
+	        System.out.println();
+	    }
+	     System.out.println("\n");
+	  System.out.println( rotation(arr) );
 	}
 }
