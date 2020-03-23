@@ -45,6 +45,27 @@ public class LinkedList
    
     
     
+    
+    public static void addIntersectionPoint(Node n1, Node n2) {
+    	while(n1.next != null) {
+    		n1 = n1.next;
+    	}
+    	while(n2.next != null) {
+    		n2 = n2.next;
+    	}
+    	
+    	// add three extra node
+    	for(int i=0; i<3;i++)
+    	{
+    		Node n = new Node(10+i);
+    		n1.next = n;
+    		n2.next = n;
+    		n1 = n1.next;
+    		n2 = n2.next;
+    	}
+    	
+    }
+    
     public static Node intersection(LinkedList list1, LinkedList list2) {
     	return intersection(list1.head,list2.head);
     }
@@ -65,31 +86,49 @@ public class LinkedList
     	}
     	return null;
     }
-    public static void addIntersectionPoint(Node n1, Node n2) {
-    	while(n1.next != null) {
-    		n1 = n1.next;
+    public static Node intersectionInPlace(LinkedList list1, LinkedList list2) {
+    	return intersectionInPlace(list1.head, list2.head);
+    }
+    public static class Result{
+    	Node node = null;
+    	int index;
+    	Result(Node node, int index){
+    		this.node = node;
+    		this.index = index;
     	}
-    	while(n2.next != null) {
-    		n2 = n2.next;
+    }
+    public static Result getTailandLenght(Node n) {
+    	int c =1;
+    	while(n.next!=null) {
+    		c++;
+    		n = n.next;
+    	}
+    	return new Result(n,c);
+    }
+    public static Node intersectionInPlace(Node n1, Node n2) {
+    	Result r1 =  getTailandLenght(n1);
+    	Result r2 = getTailandLenght(n2);
+    	
+    	if(r1.node != r2.node) {
+    		return null;
+    	}
+    	Node small = r1.index > r2.index ? n2: n1;
+    	Node large = r1.index > r2.index ? n1: n2;
+    	
+    	for( int i=0;i <Math.abs(r1.index-r2.index) ; i++ )
+    		large = large.next;
+    	while(small != large) {
+    		small = small.next;
+    		large = large.next;
     	}
     	
-    	// add three extra node
-    	for(int i=0; i<3;i++)
-    	{
-    		Node n = new Node(10+i);
-    		n1.next = n;
-    		//System.out.println("here");
-    		n2.next = n;
-    		n1 = n1.next;
-    		n2 = n2.next;
-    	}
-    	
+    	return large;
     }
 	public static void main(String[] args) {
     	LinkedList list1 = new LinkedList();
     	LinkedList list2 = new LinkedList();
     	
-		list1 = insert(list1,7);
+		list1 = insert(list1,9);
 		list1 = insert(list1,7);
 		list1 = insert(list1,2);
 		list1 = insert(list1,3);
@@ -101,7 +140,7 @@ public class LinkedList
 		// lists before intersection
 		printlist(list1);
 		printlist(list2);
-		Node n = intersection(list1,list2);
+		Node n = intersectionInPlace(list1,list2);
 		if(n == null) {
 			System.out.println("Lists have no intersection");
 		}else {
@@ -109,13 +148,12 @@ public class LinkedList
 			
 		}
 		
-		
 		// adding intersection nodes
 		addIntersectionPoint(list1.head,list2.head);
 		printlist(list1);
 		printlist(list2);
 		
-		n = intersection(list1,list2);
+		n = intersectionInPlace(list1,list2);
 		if(n == null) {
 			System.out.println("Lists have no intersection");
 		}else {
